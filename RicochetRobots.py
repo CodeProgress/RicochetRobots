@@ -1,6 +1,6 @@
 import BoardConfig
 import queue
-
+import cProfile
 
 class RRobots:
     def __init__(self, board_configuration):
@@ -38,18 +38,12 @@ class RRobots:
             raise KeyError("Invalid goal square")
         return self.robot_position_color_index[goal_color]
 
-    @staticmethod
-    def is_sq_on_board(sq):
-        return 0 <= sq <= 255
-
-    def destination_sq(self, direction, starting_sq, robot_positions):
+    def destination_sq(self, direction, starting_sq, robot_positions_set):
         current_sq = starting_sq
 
         while direction not in self.board_configuration[current_sq]:
             next_sq = current_sq + self.direction_offset[direction]
-            if not self.is_sq_on_board(next_sq):
-                break
-            if next_sq in robot_positions:
+            if next_sq in robot_positions_set:
                 break
             current_sq = next_sq
 
@@ -57,10 +51,10 @@ class RRobots:
 
     def successor_robot_positions(self, robot_positions):
         successors = []
-
+        robot_positions_set = set(robot_positions)
         for i, robot_position in enumerate(robot_positions):
             for direction in "NESW":
-                successor_sq = self.destination_sq(direction, robot_position, robot_positions)
+                successor_sq = self.destination_sq(direction, robot_position, robot_positions_set)
                 successor_positions = list(robot_positions)
                 successor_positions[i] = successor_sq
                 successors.append(tuple(successor_positions))
@@ -103,6 +97,10 @@ assert rr.breadth_first_search(37, (0, 71, 92, 6)) \
            (0, 4, 92, 5),
            (0, 4, 92, 37)]
 
-path = rr.breadth_first_search(37, (0, 71, 92, 33))
+# path = rr.breadth_first_search(209, (0, 71, 92, 33))
+# #
+# print(path)
 
-print(path)
+cProfile.run("rr.breadth_first_search(209, (0, 71, 92, 33))") # 7 moves
+
+# cProfile.run("rr.breadth_first_search(157, (0, 71, 92, 33))") # 10 moves
