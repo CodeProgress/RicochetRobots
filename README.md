@@ -50,7 +50,7 @@ There are eight quadrants.
 * QUAD_3B
 * QUAD_4B
 
-Each quadrant is a 16x16 section.
+Each quadrant is a 8x8 section.
 
 Four sections combine to make the board in the following manner:
 
