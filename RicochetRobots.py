@@ -31,6 +31,9 @@ class RRobots:
                 return current_path
             for successor in self.successor_robot_positions(final_position):
                 if successor not in seen_robot_positions:
+                    # check on expansion if goal reached. count 23,000 -> 8,000
+                    if successor[goal_robot_position_index] == goal_sq_index:
+                        return current_path+[successor]
                     seen_robot_positions.add(successor)
                     q.put(current_path + [successor])
         return "No path exists!"
@@ -104,6 +107,9 @@ class RRobots:
                 return current_path, count
             for successor in self.successor_robot_positions(final_position):
                 if successor not in seen_robot_positions:
+                    # check on expansion if goal reached, 1,600 --> 540
+                    if successor[goal_robot_position_index] == goal_sq_index:
+                        return current_path +[successor], count
                     seen_robot_positions.add(successor)
                     priority = len(current_path)
                     # if set([x for x in successor if x != successor[goal_robot_position_index]]).intersection(three_away_squares):
@@ -124,7 +130,7 @@ class RRobots:
         Precompute landing squares for NESW for all 256 squares, then quickly update based on robot positions?"""
         pass
 
-    def pre_computer_a_star_heuristic(self, goal_square):
+    def pre_compute_a_star_heuristic(self, goal_square):
         pass
 
 
@@ -141,10 +147,16 @@ print(solution[1])
 for i in solution[0]:
     print(i)
 
+# solution = rr.breadth_first_search_w_priority_queue((13, 1), ((0, 0), (4, 7), (5, 12), (2, 1))) # 7 moves
+# print(solution[1])
+# for i in solution[0]:
+#     print(BoardConfig.printable_board(board, i))
+
 # solution = rr.breadth_first_search((13, 1), ((0, 0), (4, 7), (5, 12), (2, 1))) # 7 moves
 # for i in solution:
 #     print(i)
 
 # solution2 = rr.breadth_first_search((9, 13), ((0, 0), (4, 7), (5, 12), (2, 1))) # 10 moves
-# for j in solution2:
+# print(solution2[1])
+# for j in solution2[0]:
 #     print(j)
